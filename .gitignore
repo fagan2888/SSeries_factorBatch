@@ -1,0 +1,15 @@
+__pycache__/
+**/.ropeproject/
+*.py[cod]
+*$py.class
+*.log
+*.p
+
+.vscode
+.ipynb_checkpoints
+.old
+save_batch
+save_total
+save_map
+save_temp
+log

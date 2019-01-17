@@ -1,0 +1,5 @@
+name: batchenv
+channels:
+  - defaults
+prefix: C:\Users\KIC\Anaconda3\envs\batchenv
+
