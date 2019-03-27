@@ -498,8 +498,9 @@ def WS_qtr_sum(Item='4860', Table='WSPITFinVal',
         # Make 'DT_': has each FiscalPrd with 4 prev FiscalPrd_back
         cols = ['Item', 'Code', 'FiscalPrd', 'FiscalPrd2', 'adj_PointDate']
         DT_ = DT.loc[DT['Value_'].notnull(), cols].copy()
-        DT_ = rm_backward(DT_, sort_col=['Item', 'Code', 'adj_PointDate', 'FiscalPrd'],
-                          grp_col=['Item', 'Code'], filter_col='FiscalPrd')
+        if DT_.shape[0] > 0:
+            DT_ = rm_backward(DT_, sort_col=['Item', 'Code', 'adj_PointDate', 'FiscalPrd'],
+                            grp_col=['Item', 'Code'], filter_col='FiscalPrd')
         DT_['m1'], DT_['m2'], DT_['m3'], DT_['m4'] = [0, 1, 2, 3]
 
         DT_ = DT_.melt(id_vars=cols, value_vars=['m1', 'm2', 'm3', 'm4'],
@@ -525,8 +526,11 @@ def WS_qtr_sum(Item='4860', Table='WSPITFinVal',
         # sort to remove duplicates of FiscalPrd_back point-in-time
         DT_proc_0 = DT_proc_.drop_duplicates(
             ['Code', 'Item', 'ref_Point', 'FiscalPrd', 'FiscalPrd_back'], keep='last').copy()
-        DT_proc_0['CNT'] = DT_proc_0.groupby(
-            ['Code', 'Item', 'ref_Point', 'FiscalPrd'])['PointDate'].transform(len)
+        if DT_proc_0.shape[0] > 0:
+            DT_proc_0['CNT'] = DT_proc_0.groupby(
+                ['Code', 'Item', 'ref_Point', 'FiscalPrd'])['PointDate'].transform(len)
+        else:
+            DT_proc_0['CNT'] = 0
         DT_proc_0 = DT_proc_0[DT_proc_0['CNT'] >= 2]
 
         # Get Summation by 2 Semi's
